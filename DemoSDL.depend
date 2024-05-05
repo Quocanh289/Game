@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1714354892 source:c:\users\lenovo\videos\homeworkltnc\game\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+
+1714358447 source:c:\users\lenovo\videos\homeworkltnc\game\header.cpp
+
+1714358821 source:c:\users\lenovo\videos\homeworkltnc\untitled9.cpp
+
+1714359298 source:c:\users\lenovo\videos\homeworkltnc\game\def.h.cpp
+
