@@ -17,105 +17,115 @@ struct Tictactoe {
 
     }
     int move(int row, int column)
-    {
-        if (row >= 0 && row < BOARD_SIZE &&
-            column >= 0 && column < BOARD_SIZE)
+{
+
+
+    // Thực hiện nước đi và chuyển đổi người chơi tiếp theo
+    if (row >= 0 && row < BOARD_SIZE && column >= 0 && column < BOARD_SIZE)
         {
             board[row][column] = nextMove;
-            if(nextMove==O_CELL)
+            if (nextMove == O_CELL)
             {
                 nextMove = X_CELL;
             }
-            else nextMove = O_CELL;
+            else
+            {
+                nextMove = O_CELL;
+            }
         }
-    char winner = checkWinner();
-    if (winner != EMPTY_CELL) {
-        return -1; // Trò chơi đã kết thúc
-    }
-    else if(winner == '0')
-    {
-        return 0;
-    }
+}
 
-        return 1;
-    }
 
     char checkWinner() const {
     // Kiểm tra hàng ngang
-    char kt;
-    for (int i = 0; i < BOARD_SIZE; i++)
-    {
 
-        for( int j = 0 ; j< BOARD_SIZE; j++)
-        {
-            if(board[i][0]==board[j][0]&&board[i][0]!=EMPTY_CELL)
-            {
-                kt = board[i][0];
-                continue;
-            }
-            else
-            {
-                kt =board[i][0];
-                break;
-            }
-        }
-        if(kt == board[i][0])return board[i][0];
-    }
-    for (int i = 0; i < BOARD_SIZE; i++)
-    {
-
-        for( int j = 0 ; j< BOARD_SIZE; j++)
-        {
-            if(board[0][i]==board[0][j]&&board[0][j]!=EMPTY_CELL)
-            {
-                kt = board[0][j];
-                continue;
-            }
-            else
-            {
-                kt = board[0][i];
-                break;
-            }
-        }
-        if(kt == board[0][i]) return board[0][i];
-    }
-    // Kiểm tra đường chéo chính
-    for( int i =0; i< BOARD_SIZE; i++)
-    {
-        if(board[0][0]!=EMPTY_CELL&&board[0][0]==board[i][i])
-        {
-            kt = board[0][0];
-        }
-        else
-        {
-                kt = board[i][i];
-                break;
-        }
-        if(kt == board[0][0]) return board[0][0];
-    }
-    // Kiểm tra đường chéo phụ
-    for( int i =0; i< BOARD_SIZE; i++)
-    {
-        if(board[0][BOARD_SIZE-1]!=EMPTY_CELL&&board[0][BOARD_SIZE-1]==board[i][BOARD_SIZE-1-i])
-        {
-            kt = board[0][BOARD_SIZE-1];
-        }
-        else
-        {
-                kt = board[i][BOARD_SIZE-1-i];
-                break;
-        }
-        if(kt == board[0][BOARD_SIZE-1]) return board[0][BOARD_SIZE-1];
-    }
-
-    // Kiểm tra xem còn ô trống nào không, nếu không thì là hòa
     for (int i = 0; i < BOARD_SIZE; i++) {
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            if (board[i][j] == EMPTY_CELL) {
-                return EMPTY_CELL; // Chưa kết thúc trò chơi
-            }
+    // Khởi tạo cờ cho hàng ngang hiện tại
+    bool isRowWin = true;
+    // So sánh tất cả các ô trong hàng ngang
+    for (int j = 1; j < BOARD_SIZE; j++) {
+        if (board[i][j] == EMPTY_CELL || board[i][j] != board[i][0]) {
+            // Nếu ô không giống hoặc là ô trống, đánh dấu không phải hàng chiến thắng
+            isRowWin = false;
+            break;
         }
     }
+    // Nếu tất cả các ô trong hàng ngang đều giống nhau và không phải là ô trống, in ra giá trị của ô đầu tiên
+    if (isRowWin) {
+        return board[i][0];
+
+    }
+}
+   // kiem tra hang doc
+    for (int i = 0; i < BOARD_SIZE; i++) {
+    // Khởi tạo cờ cho hàng ngang hiện tại
+    bool isRowWin = true;
+    // So sánh tất cả các ô trong hàng ngang
+    for (int j = 1; j < BOARD_SIZE; j++) {
+        if (board[i][j] == EMPTY_CELL || board[i][j] != board[0][i]) {
+
+            isRowWin = false;
+            break;
+        }
+    }
+    // Nếu tất cả các ô trong hàng ngang đều giống nhau và không phải là ô trống, in ra giá trị của ô đầu tiên
+    if (isRowWin) {
+        return board[0][i];
+
+    }
+}
+    // kiem tra duong cheo chinh
+    bool isWin = true;
+    for( int i =0; i<BOARD_SIZE; i++)
+    {
+        if(board[i][i]!=board[0][0]||board[i][i]== EMPTY_CELL)
+        {
+            isWin = false;
+            break;
+        }
+    }
+    if(isWin){
+       return board[0][0];
+
+    }
+    // kiemtra duong cheo phu
+    bool Win = true;
+    for( int i =0; i<BOARD_SIZE; i++)
+    {
+        if(board[i][BOARD_SIZE-1-i]!=board[0][BOARD_SIZE-1]||board[i][BOARD_SIZE-1-i]== EMPTY_CELL)
+        {
+            Win = false;
+            break;
+        }
+    }
+    if(Win){
+        return board[0][BOARD_SIZE-1];
+
+    }
+//    // Kiểm tra xem còn ô trống nào không, nếu không thì là hòa
+//    for (int i = 0; i < BOARD_SIZE; i++) {
+//        for (int j = 0; j < BOARD_SIZE; j++) {
+//            if (board[i][j] == EMPTY_CELL) {
+//                return EMPTY_CELL; // Chưa kết thúc trò chơi
+//            }
+//        }
+//    }
+bool isBoardFull = true;
+for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int j = 0; j < BOARD_SIZE; j++) {
+        if (board[i][j] == EMPTY_CELL) {
+            isBoardFull = false;
+            break;
+        }
+    }
+    if (!isBoardFull) {
+        break;
+    }
+}
+// Nếu không có ô trống nào, trả về 'T' để biểu thị hòa
+if (!isBoardFull) {
+    return EMPTY_CELL;
+}
 
     return '0'; // Hòa
 }
