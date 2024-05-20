@@ -7,19 +7,15 @@
 #include <SDL_mixer.h>
 //#include "intro.h"
 using namespace std;
-int processClick(int x, int y, Tictactoe& game) {
+void  processClick(int x, int y, Tictactoe& game) {
     // chuyển tọa độ màn hình x, y thành tọa độ hàng cột của game
      int clickedCol = (x - BOARD_X) / CELL_SIZE;
     int clickedRow = (y - BOARD_Y) / CELL_SIZE;
-    return game.move(clickedRow, clickedCol);
+    game.move(clickedRow, clickedCol);
 }
-int main(int argc, char *argv[])
+void handleEvent()
 {
-    Graphics graphics;
-    graphics.init();
-    graphics.renderIntro();
-
-    SDL_Event e;
+   SDL_Event e;
     bool introDone = false;
 
     while (!introDone) {
@@ -32,52 +28,69 @@ int main(int argc, char *argv[])
                 introDone = true;
             }
         }
-        SDL_Delay(100);
+
     }
+}
+int main(int argc, char *argv[])
+{
+    Graphics graphics;
+    graphics.init();
+    graphics.renderIntro();
+    handleEvent();
 
     Tictactoe game;
     game.init();
     graphics.renderBackground(game);
     graphics.render(game);
+    Mix_Music *gMusic = graphics.loadMusic("Point.mp3");
+    graphics.play(gMusic);
+
+    Mix_Chunk *gJump = graphics.loadSound("sound.mp3");
 
     int x, y;
     SDL_Event event;
     bool quit = false;
     while (!quit) {
         while (SDL_PollEvent(&event) != 0)
+        {
+            switch (event.type)
             {
-             switch (event.type)
-             {
                 case SDL_QUIT:
                     quit = true; // Thoát khỏi trò chơi
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                     SDL_GetMouseState(&x, &y);
-                    // Xử lý click chuột và kiểm tra kết thúc trò chơi
-                    if (processClick(x, y, game) == -1)
+                    graphics.play(gJump);
+                    if (game.checkWinner() != EMPTY_CELL)
                     {
+                        processClick(x, y, game);
                         graphics.render(game);
-                        graphics.renderIntro();
-                        quit = true;
-                    }
-                    else if(processClick(x,y,game)==1)
-                    {
-                        graphics.render(game);
-                        // Kiểm tra kết thúc trò chơi sau mỗi nước đi
-                            cout << "Player " << game.checkWinner() << " wins!" << endl;
+                        if (game.checkWinner() == '0') {
+                            cout << "Hoa";
 
-                    }
-                    else if(processClick(x,y,game)==0)
-                    {
-                        graphics.render(game);
+                        } else {
+                            cout << "Win";
+
+                        }
+
                         quit = true;
                     }
-              }
+                    else
+                    {
+                        processClick(x, y, game);
+                        graphics.render(game);
+                    }
+
                     break;
             }
 
+        }
         SDL_Delay(100);
+
     }
+    if (gMusic != nullptr) Mix_FreeMusic( gMusic );
+    if (gJump != nullptr) Mix_FreeChunk( gJump);
+
 
     graphics.quit();
     return 0;
