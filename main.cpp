@@ -23,9 +23,32 @@ void handleEvent()
             if (e.type == SDL_QUIT)
             {
                 introDone = true;
+
             } else if (e.type == SDL_KEYDOWN || e.type == SDL_FINGERDOWN)
             {
                 introDone = true;
+
+            }
+        }
+
+    }
+}
+void handleIntro ()
+{
+   SDL_Event e;
+    bool introDone = false;
+
+    while (!introDone) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT)
+            {
+                introDone = true;
+
+
+            } else if ((e.type == SDL_KEYDOWN) && (e.key.keysym.sym == SDLK_RETURN))
+            {
+                introDone = true;
+
             }
         }
 
@@ -36,7 +59,7 @@ int main(int argc, char *argv[])
     Graphics graphics;
     graphics.init();
     graphics.renderIntro();
-    handleEvent();
+    handleIntro();
 
     Tictactoe game;
     game.init();
@@ -66,13 +89,22 @@ int main(int argc, char *argv[])
                         processClick(x, y, game);
                         graphics.render(game);
                         if (game.checkWinner() == '0') {
-                            cout << "Hoa";
+                            graphics.Draw();
+                            handleEvent();
 
                         } else {
-                            cout << "Win";
+
+                            if(game.checkWinner() == X_CELL)
+                            {
+                                graphics.renderX();
+                            }
+                            else graphics.renderO();
+                            handleEvent();
 
                         }
 
+                        graphics.GameOver();
+                        SDL_Delay(100);
                         quit = true;
                     }
                     else
