@@ -94,11 +94,21 @@ struct Graphics {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 int x = BOARD_X + j * CELL_SIZE;
                 int y = BOARD_Y + i * CELL_SIZE;
-                switch (game.board[i][j]) {
-                    case EMPTY_CELL: renderTexture(cellEmpty, x, y); break;
-                    case X_CELL: renderTexture(cellX, x, y); break;
-                    case O_CELL: renderTexture(cellO, x, y); break;
-                };
+                if(game.board[i][j] == EMPTY_CELL)
+                {
+                    renderTexture(cellEmpty, x, y); 
+                    break;
+                }
+                else if(game.board[i][j] == X_CELL)
+                {
+                    renderTexture(cellX, x, y); 
+                    break;
+                }
+                else if(game.board[i][j] == O_CELL)
+                {
+                    renderTexture(cellO, x, y); 
+                    break;
+                }
             };
 
         presentScene();
