@@ -1,19 +1,20 @@
 // tao san cac texture, window, render(chi can goi ham de no thuc hien la dc)
 #include "logic.h"
+#include <SDL_mixer.h>
 struct Graphics {
     // trong struc
     SDL_Renderer *renderer;
     SDL_Window *window;
     // tao texture san cho vao 1 ham rieng
     SDL_Texture*cellEmpty, *cellX, *cellO;
-    SDL_Texture* intro, *background;
+    SDL_Texture* intro, *background, *markx,*marko,*gameover,*draw;
 
     void init()
     {
         initSDL();
         cellEmpty = loadTexture("cell_empty.png");
-        cellX = loadTexture("cell_x.png");
-        cellO= loadTexture("cell_o.png");
+        cellX = loadTexture("X.png");
+        cellO= loadTexture("O.png");
 
     }
 
@@ -45,6 +46,10 @@ struct Graphics {
 
         if (renderer == nullptr)
              logErrorAndExit("CreateRenderer", SDL_GetError());
+        if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+        {
+            logErrorAndExit( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+        }
 
 
 
@@ -124,11 +129,35 @@ struct Graphics {
         prepareScene(intro);
         presentScene();
     }
+    void renderX()
+    {
+        markx = loadTexture("Xwin.png");
+        prepareScene(markx);
+        presentScene();
+    }
+    void renderO ()
+    {
+        marko = loadTexture("Owin.png");
+        prepareScene(marko);
+        presentScene();
+    }
+    void GameOver()
+    {
+        gameover = loadTexture("Gameover.png");
+        prepareScene(gameover);
+        presentScene();
+    }
+    void Draw()
+    {
+        draw = loadTexture("tie.png");
+        prepareScene(draw);
+        presentScene();
 
-
+    }
 
     void quit()
     {
+
         SDL_DestroyTexture(cellEmpty);
         cellEmpty = nullptr;
         SDL_DestroyTexture(cellX);
@@ -136,11 +165,46 @@ struct Graphics {
         SDL_DestroyTexture(cellO);
         cellO = nullptr;
 
+        Mix_Quit();
         IMG_Quit();
 
 
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
         SDL_Quit();
+    }
+
+    Mix_Music *loadMusic(const char* path)
+    {
+        Mix_Music *gMusic = Mix_LoadMUS(path);
+        if (gMusic == nullptr) {
+            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR,
+                           "Could not load music! SDL_mixer Error: %s", Mix_GetError());
+        }
+        return gMusic;
+    }
+    void play(Mix_Music *gMusic)
+    {
+        if (gMusic == nullptr) return;
+
+        if (Mix_PlayingMusic() == 0) {
+            Mix_PlayMusic( gMusic, -1 );
+        }
+        else if( Mix_PausedMusic() == 1 ) {
+            Mix_ResumeMusic();
+        }
+    }
+
+    Mix_Chunk* loadSound(const char* path) {
+        Mix_Chunk* gChunk = Mix_LoadWAV(path);
+        if (gChunk == nullptr) {
+            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR,
+                       "Could not load sound! SDL_mixer Error: %s", Mix_GetError());
+        }
+    }
+    void play(Mix_Chunk* gChunk) {
+        if (gChunk != nullptr) {
+            Mix_PlayChannel( -1, gChunk, 0 );
+        }
     }
 };
