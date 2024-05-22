@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1716131930 source:c:\users\lenovo\videos\homeworkltnc\game\newsdl2\main.cpp
+1716279292 source:c:\users\lenovo\videos\homeworkltnc\game\newsdl2\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -11,10 +11,11 @@
 1714357844 source:c:\users\lenovo\videos\homeworkltnc\game\newsdl2\untitled1.cpp
 	<iostream>
 
-1716033844 c:\users\lenovo\videos\homeworkltnc\game\newsdl2\defs.h
+1716256942 c:\users\lenovo\videos\homeworkltnc\game\newsdl2\defs.h
 
-1716079416 c:\users\lenovo\videos\homeworkltnc\game\newsdl2\graphics.h
+1716279290 c:\users\lenovo\videos\homeworkltnc\game\newsdl2\graphics.h
 	"logic.h"
+	<SDL_mixer.h>
 
-1716131800 c:\users\lenovo\videos\homeworkltnc\game\newsdl2\logic.h
+1716279288 c:\users\lenovo\videos\homeworkltnc\game\newsdl2\logic.h
 

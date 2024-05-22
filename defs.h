@@ -1,7 +1,7 @@
 #ifndef _DEFS__H
 #define _DEFS__H
-#define BOARD_X 20
-#define BOARD_Y 20
+#define BOARD_X 250
+#define BOARD_Y 185
 #define CELL_SIZE 70
 
 
@@ -13,6 +13,7 @@ enum Gamestates
 {
     EXIT,
     TITLE,
+    GAMEOVER,
 
 };
 
